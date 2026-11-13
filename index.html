@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B.O.B. - Robot Control Panel</title>
+    <style>
+        :root {
+            --bg-color: #0b1120;
+            --card-bg: #162032;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            text-align: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid #1e293b;
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 13px 10px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: transform 0.1s ease, opacity 0.1s ease;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        button:active {
+            transform: scale(0.96);
+            opacity: 0.9;
+        }
+
+        .btn-cyan { background-color: #0891b2; }
+        .btn-blue { background-color: #2563eb; }
+        .btn-green { background-color: #059669; }
+        .btn-amber { background-color: #d97706; }
+        .btn-red { background-color: #dc2626; }
+        .btn-slate { background-color: #334155; }
+
+        textarea {
+            width: 100%;
+            height: 95px;
+            background-color: #0b1120;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            color: var(--text-main);
+            padding: 12px;
+            font-size: 1rem;
+            resize: none;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .control-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-cyan);
+        }
+
+        .quick-chips {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .chip {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: var(--text-main);
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>🤖 B.O.B. Control Core</h1>
+            <p>Battery Operated Buddy • Deep Male Voice & 5s Soundtracks</p>
+        </header>
+
+        <!-- Extended 5-Second Robot Soundtracks & FX -->
+        <div class="card">
+            <div class="card-title">
+                <span>🔊 5-Sec Robot Soundtracks & FX</span>
+                <button class="btn-red" style="padding: 5px 10px; font-size: 0.75rem;" onclick="stopAllAudio()">⏹ Stop All</button>
+            </div>
+            
+            <button class="btn-cyan" style="width: 100%; font-size: 0.95rem;" onclick="playExtendedFX('theme')">🎵 Play 6s B.O.B. Theme Soundtrack</button>
+
+            <div class="btn-grid">
+                <button class="btn-blue" onclick="playExtendedFX('boot')">⚡ 5s System Boot-Up</button>
+                <button class="btn-amber" onclick="playExtendedFX('compute')">⚙️ 5s Heavy Computing</button>
+                <button class="btn-green" onclick="playExtendedFX('radar')">📡 5s Deep Radar Scan</button>
+                <button class="btn-red" onclick="playExtendedFX('alert')">🚨 5s Security Alert</button>
+            </div>
+        </div>
+
+        <!-- Deep Robotic Male Voice Synthesizer -->
+        <div class="card">
+            <div class="card-title">🗣️ B.O.B. Male Voice Module</div>
+
+            <div class="btn-grid">
+                <button class="btn-blue" onclick="setMaleMode('ultraDeep')">🤖 Ultra-Deep Mech</button>
+                <button class="btn-cyan" onclick="setMaleMode('standardMale')">🎙️ Classic Male Bot</button>
+            </div>
+
+            <textarea id="speechText" placeholder="Type what B.O.B. should say...">Hello humans. My name is Bob. All systems are online and ready.</textarea>
+
+            <div class="controls-row">
+                <div class="control-group">
+                    <label>Voice Depth (Pitch): <span id="pitchVal">0.45</span></label>
+                    <input type="range" id="pitchRange" min="0.1" max="0.85" step="0.05" value="0.45" oninput="updateSliders()">
+                </div>
+                <div class="control-group">
+                    <label>Robot Cadence (Speed): <span id="rateVal">0.88</span></label>
+                    <input type="range" id="rateRange" min="0.6" max="1.1" step="0.02" value="0.88" oninput="updateSliders()">
+                </div>
+            </div>
+
+            <button class="btn-green" style="font-size: 1rem; padding: 14px;" onclick="speakBob()">🔊 Transmit Male Voice</button>
+
+            <div class="quick-chips">
+                <button class="chip" onclick="quickSay('Beep boop. Affirmative.')">"Affirmative"</button>
+                <button class="chip" onclick="quickSay('Processing your request. Please stand by.')">"Processing..."</button>
+                <button class="chip" onclick="quickSay('Scanning human. Intelligence level detected.')">"Scan Human"</button>
+                <button class="chip" onclick="quickSay('Thank you for visiting my exhibit.')">"Thank you"</button>
+            </div>
+        </div>
+
+        <!-- Voice Recorder -->
+        <div class="card">
+            <div class="card-title">🎙️ Custom Voice Recorder</div>
+            <div class="btn-grid">
+                <button class="btn-red" id="recordBtn" onclick="toggleRecording()">● Record Clip</button>
+                <button class="btn-slate" id="stopRecordBtn" onclick="stopRecording()" disabled>⏹ Stop & Save</button>
+            </div>
+            <div id="recordedList" style="display:flex; flex-direction:column; gap:6px;"></div>
+        </div>
+    </div>
+
+    <script>
+        let audioCtx = null;
+        let activeNodes = [];
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function stopAllAudio() {
+            window.speechSynthesis.cancel();
+            activeNodes.forEach(node => {
+                try { node.stop(); } catch(e) {}
+            });
+            activeNodes = [];
+        }
+
+        // 5-to-6 Second Multi-Layered Synthetic Robot Soundtracks
+        function playExtendedFX(type) {
+            stopAllAudio();
+            initAudio();
+            const now = audioCtx.currentTime;
+
+            if (type === 'theme') {
+                // 6-second futuristic robot synth bass & arpeggio soundtrack
+                const bassNotes = [110, 110, 130.81, 146.83, 110, 110, 98, 130.81];
+                const leadNotes = [440, 523.25, 659.25, 587.33, 440, 659.25, 783.99, 880];
+                
+                for (let step = 0; step < 16; step++) {
+                    let time = now + step * 0.375; // 16 steps * 0.375s = 6.0 seconds
+                    
+                    // Deep Bass Pulse
+                    let bass = audioCtx.createOscillator();
+                    let bassGain = audioCtx.createGain();
+                    bass.type = 'sawtooth';
+                    bass.frequency.setValueAtTime(bassNotes[step % bassNotes.length], time);
+                    bassGain.gain.setValueAtTime(0.14, time);
+                    bassGain.gain.exponentialRampToValueAtTime(0.01, time + 0.32);
+                    bass.connect(bassGain);
+                    bassGain.connect(audioCtx.destination);
+                    bass.start(time);
+                    bass.stop(time + 0.33);
+                    activeNodes.push(bass);
+
+                    // Cute Robot Melody Beep
+                    let lead = audioCtx.createOscillator();
+                    let leadGain = audioCtx.createGain();
+                    lead.type = 'square';
+                    lead.frequency.setValueAtTime(leadNotes[step % leadNotes.length], time);
+                    leadGain.gain.setValueAtTime(0.07, time);
+                    leadGain.gain.exponentialRampToValueAtTime(0.005, time + 0.2);
+                    lead.connect(leadGain);
+                    leadGain.connect(audioCtx.destination);
+                    lead.start(time);
+                    lead.stop(time + 0.22);
+                    activeNodes.push(lead);
+                }
+            } 
+            else if (type === 'boot') {
+                // 5-second power-up turbine & computer initialization sequence
+                let turbine = audioCtx.createOscillator();
+                let tGain = audioCtx.createGain();
+                turbine.type = 'sawtooth';
+                turbine.frequency.setValueAtTime(65, now);
+                turbine.frequency.exponentialRampToValueAtTime(420, now + 4.5);
+                tGain.gain.setValueAtTime(0.05, now);
+                tGain.gain.linearRampToValueAtTime(0.18, now + 3.5);
+                tGain.gain.exponentialRampToValueAtTime(0.001, now + 5.2);
+                turbine.connect(tGain);
+                tGain.connect(audioCtx.destination);
+                turbine.start(now);
+                turbine.stop(now + 5.2);
+                activeNodes.push(turbine);
+
+                // Random data chirps over 5 seconds
+                for (let i = 0; i < 20; i++) {
+                    let t = now + i * 0.24;
+                    let chirp = audioCtx.createOscillator();
+                    let cGain = audioCtx.createGain();
+                    chirp.type = 'sine';
+                    chirp.frequency.setValueAtTime(300 + (i * 45), t);
+                    cGain.gain.setValueAtTime(0.09, t);
+                    cGain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+                    chirp.connect(cGain);
+                    cGain.connect(audioCtx.destination);
+                    chirp.start(t);
+                    chirp.stop(t + 0.13);
+                    activeNodes.push(chirp);
+                }
+            } 
+            else if (type === 'compute') {
+                // 5-second retro mainframe calculation beeps
+                const freqs = [260, 390, 520, 310, 620, 440, 780, 340];
+                for (let i = 0; i < 32; i++) {
+                    let t = now + i * 0.155; // ~5 seconds
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freqs[(i * 3) % freqs.length], t);
+                    gain.gain.setValueAtTime(0.14, t);
+                    gain.gain.exponentialRampToValueAtTime(0.005, t + 0.11);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(t);
+                    osc.stop(t + 0.12);
+                    activeNodes.push(osc);
+                }
+            } 
+            else if (type === 'radar') {
+                // 5-second deep sonar & radar sweep pulses
+                for (let p = 0; p < 5; p++) {
+                    let t = now + p * 1.0; // 5 pulses = 5 seconds
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(220, t);
+                    osc.frequency.exponentialRampToValueAtTime(880, t + 0.45);
+                    osc.frequency.exponentialRampToValueAtTime(180, t + 0.9);
+                    gain.gain.setValueAtTime(0.16, t);
+                    gain.gain.exponentialRampToValueAtTime(0.005, t + 0.92);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(t);
+                    osc.stop(t + 0.95);
+                    activeNodes.push(osc);
+                }
+            } 
+            else if (type === 'alert') {
+                // 5-second sci-fi warning klaxon
+                for (let a = 0; a < 10; a++) {
+                    let t = now + a * 0.5; // 10 cycles = 5 seconds
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(340, t);
+                    osc.frequency.linearRampToValueAtTime(170, t + 0.42);
+                    gain.gain.setValueAtTime(0.16, t);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.45);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(t);
+                    osc.stop(t + 0.46);
+                    activeNodes.push(osc);
+                }
+            }
+        }
+
+        // Male-Locked Robotic Speech Engine
+        let voices = [];
+        function loadVoices() {
+            voices = window.speechSynthesis.getVoices();
+        }
+        loadVoices();
+        if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        function updateSliders() {
+            document.getElementById('pitchVal').textContent = document.getElementById('pitchRange').value;
+            document.getElementById('rateVal').textContent = document.getElementById('rateRange').value;
+        }
+
+        function setMaleMode(mode) {
+            if (mode === 'ultraDeep') {
+                document.getElementById('pitchRange').value = '0.30';
+                document.getElementById('rateRange').value = '0.84';
+            } else {
+                document.getElementById('pitchRange').value = '0.55';
+                document.getElementById('rateRange').value = '0.92';
+            }
+            updateSliders();
+        }
+
+        function speakBob() {
+            window.speechSynthesis.cancel();
+            const text = document.getElementById('speechText').value;
+            if (!text) return;
+
+            loadVoices();
+            const utterance = new SpeechSynthesisUtterance(text);
+
+            // Force selection of an English male voice if available on device
+            let maleVoice = voices.find(v => 
+                v.lang.toLowerCase().includes('en') && 
+                (v.name.toLowerCase().includes('male') || 
+                 v.name.toLowerCase().includes('david') || 
+                 v.name.toLowerCase().includes('daniel') || 
+                 v.name.toLowerCase().includes('george') || 
+                 v.name.toLowerCase().includes('uk english male'))
+            );
+
+            // Fallback to any English voice so it never speaks German/Danish
+            let englishFallback = voices.find(v => v.lang.toLowerCase().includes('en'));
+
+            if (maleVoice) {
+                utterance.voice = maleVoice;
+            } else if (englishFallback) {
+                utterance.voice = englishFallback;
+            }
+
+            // Force deep robotic male pitch & cadence even if device uses default voice
+            utterance.pitch = parseFloat(document.getElementById('pitchRange').value);
+            utterance.rate = parseFloat(document.getElementById('rateRange').value);
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function quickSay(phrase) {
+            document.getElementById('speechText').value = phrase;
+            speakBob();
+        }
+
+        // Custom Voice Recorder
+        let mediaRecorder;
+        let audioChunks = [];
+
+        async function toggleRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const listContainer = document.getElementById('recordedList');
+                    const clipName = prompt("Name this voice clip for B.O.B.:", "B.O.B. Line");
+                    if (!clipName) return;
+
+                    const itemDiv = document.createElement('div');
+                    itemDiv.style.cssText = "display:flex; align-items:center; justify-content:space-between; background:#0b1120; padding:8px 12px; border-radius:8px; border:1px solid #1e293b;";
+                    
+                    const label = document.createElement('span');
+                    label.textContent = clipName;
+                    label.style.fontSize = "0.85rem";
+
+                    const playBtn = document.createElement('button');
+                    playBtn.textContent = "▶ Play";
+                    playBtn.className = "btn-green";
+                    playBtn.style.cssText = "padding:6px 12px; font-size:0.8rem;";
+
+                    const audioElement = new Audio(audioUrl);
+                    playBtn.onclick = () => audioElement.play();
+
+                    itemDiv.appendChild(label);
+                    itemDiv.appendChild(playBtn);
+                    listContainer.appendChild(itemDiv);
+                };
+
+                mediaRecorder.start();
+                document.getElementById('recordBtn').disabled = true;
+                document.getElementById('recordBtn').style.opacity = "0.5";
+                document.getElementById('stopRecordBtn').disabled = false;
+            } catch (err) {
+                alert("Please allow microphone access in your browser to record clips.");
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                mediaRecorder.stop();
+                document.getElementById('recordBtn').disabled = false;
+                document.getElementById('recordBtn').style.opacity = "1";
+                document.getElementById('stopRecordBtn').disabled = true;
+            }
+        }
+    </script>
+</body>
+</html>
